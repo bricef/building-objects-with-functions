@@ -24,6 +24,7 @@
  * This was not built in 1h!
 
 # Lisp primer
+## The parentheses
 Curly braces language 
 
     <object>.<verb>(<subject>) // man.eat(dog)
@@ -34,8 +35,12 @@ Lisp
 
 A better representation would be
 
-    (<verb> <subject> <subject> ...) (eat dog cat spam eggs)
+    (<verb> <subject> <subject> ...) ; (eat dog cat spam eggs)
 
+This is a **good** thing. So little syntax makes reading code much easier.
+
+
+## First order functions
 Functions can be values.
 
 For example, in curly braces, if you have a
@@ -52,6 +57,20 @@ All `f`, `o`, `g` and `h` can be functions.
 
 Trippy. Or is that foggy?
 
+## Quoting and unquoting
+
+The forms
+
+    `a
+
+and 
+
+    (quote a)
+
+are equivalent. They mean "The quoted thing as is".
+
+
+
 You know lisp now. My work here is done, let's grab some beers.
 
 # Programming Assumptions
@@ -59,7 +78,7 @@ You know lisp now. My work here is done, let's grab some beers.
 
 > "When you assume, you're making an ass out of U and me." - Anonymous
 
-Lists, First, Rest, Map, cond
+Lists, first, rest, cond, eq?, empty? (in scheme) 
 
 # Begin with the end in Mind
 
