@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Building Objects with Functions</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- infrastructure -->
+  <script src="js/modernizr.min.js"></script>
+  <script src="js/jquery-2.1.4.min.js"></script>
+  <script src="js/jqconsole.js"></script>
+  <script src="js/mousetrap.min.js"></script>
+
+  <!-- bring in Lisp -->
+  <script src="js-lisps/js-lisp.git/build/lisp.js"></script>
+
+  <!-- lisp scripts -->
+  <script type="text/lisp" src="js-lisps/js-lisp.git/build/core.lisp"></script>
+  <script type="text/lisp" src="bootstrap.lisp"></script>
+
+</head>
+<body>
+  
+  <div id="container">
+	  <div id="history">
+	  	
+
+	  </div>
+	  <div id="prompt" type="textarea"></div>
+  </div>
+
+
+<script>
+
+$(function(){
+	// Load all the lisp script
+	// TODO: update lisp.js so that it uses something more sensible than XHR.open()...
+	$('script[type="text/lisp"]').each(function(i,el){
+		lisp.load($(el).attr('src'));
+	});
+
+	var original_env = $.extend(true, {}, lisp.env);
+
+	var prompt = $('#prompt').jqconsole(null, 'lisp> ', '...   ');
+
+	// Abort prompt on Ctrl+Z.
+    prompt.RegisterShortcut('Z', function() {
+      prompt.AbortPrompt();
+    });
+    // Move to line start Ctrl+A.
+    prompt.RegisterShortcut('A', function() {
+      prompt.MoveToStart();
+    });
+    // Move to line end Ctrl+E.
+    prompt.RegisterShortcut('E', function() {
+      prompt.MoveToEnd();
+    });
+    prompt.RegisterMatching('{', '}', 'brace');
+    prompt.RegisterMatching('(', ')', 'paran');
+    prompt.RegisterMatching('[', ']', 'bracket');
+    prompt.SetIndentWidth(4); 
+
+	function add_expression(exp){
+		var $el = $("<div>").addClass("exp").text(exp);
+		// syntax highlight using ace?
+		$("#history").append($el)
+	}
+	
+	function add_result(res){
+		var $el = $("<div>").addClass("result").text(res);
+		// syntax highlight using ace?
+		$("#history").append($el);
+	}
+
+	function add_error(err){
+		var $el = $("<div>").addClass("err").text(err);
+		// syntax highlight using ace?
+		$("#history").append($el);
+	}
+
+	function doLisp(exp){
+		try{
+			add_result( lisp.eval(exp));
+		}catch(err){
+			add_error(err.message);
+		}
+	}
+
+	function handle(expression){
+
+		// add expression to history
+		add_expression(expression);
+		doLisp(expression);
+		
+		prompt.Clear();
+		prompt.Prompt(true, handle, is_multiline);
+		return false;
+	};
+
+	function is_multiline(input){
+		// check it doesn't finish with 2 newlines.
+		if(input.slice(-2) == "\n\n"){
+			return false
+		}
+
+		// check if it parses
+		try{
+			lisp.parse.any(input);
+		}catch(err){
+			if(err.message.slice(0,11) == "EOF reached"){
+				console.log("Unfinished statement");
+				return 0;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	prompt.Prompt(true, handle, is_multiline);
+
+	// redirect all focus to console
+	$(window).click(function() {  
+      prompt.Focus();  
+    })
+});
+
+</script>
+</body>
+</html>
