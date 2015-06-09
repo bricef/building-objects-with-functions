@@ -136,6 +136,9 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="portlet box green">
 						<div class="portlet-title">
 							<!-- <div class="caption">Run Code</div> -->
+							<div class="tools">
+								<a href="#" class="reload"></a>
+							</div>
 							<ul class="nav nav-tabs">
 								<li class="active">
 									<a href="#editor-editor" data-toggle="tab" aria-expanded="true">
@@ -361,12 +364,12 @@ $(function(){
 
 
 	// set up editor.
-	var editor = ace.edit("main-editor");
-    editor.setFontSize(20);
-    editor.renderer.setShowGutter(true);
-    editor.renderer.setShowInvisibles(true);
-    editor.setTheme("ace/theme/clouds");
-    editor.getSession().setMode("ace/mode/lisp");
+	window.editor = ace.edit("main-editor");
+    window.editor.setFontSize(20);
+    window.editor.renderer.setShowGutter(true);
+    window.editor.renderer.setShowInvisibles(false);
+    window.editor.setTheme("ace/theme/clouds");
+    window.editor.getSession().setMode("ace/mode/lisp");
 
 	// Enable fullscreen toggle
 	$("#fullscreen-toggle").click(function(e){
@@ -391,9 +394,9 @@ $(function(){
 		lisp.load($(el).attr('src'));
 	});
 
-	var builtins = Object.keys(lisp.env.symbols);
+	
 
-	editor.getSession().on('change', function(e) {
+	function reloadEditor(){
 		var forms = editor.getValue();
 		// console.log("editor sending", editor.getValue());
 		$(".editor-status").hide();
@@ -401,9 +404,9 @@ $(function(){
     	
     	// try for parsing errors
     	try{
-    		lisp.parse.any(forms);
+    		lisp.parse.script(forms);
     	}catch(err){
-    		console.log(err);
+    		console.warn(err.message + " (Don't worry if the editor is green!)");
     		$(".editor-status").hide();
     		$("#editor-buttons p.text-danger").show().text(err.message);
     		$(".editor-status.editor-error").show();
@@ -414,7 +417,7 @@ $(function(){
     	try{
     		lisp.eval(forms);
     	}catch(err){
-    		console.log(err);
+    		console.error(err.message);
     		$(".editor-status").hide();
     		$("#editor-buttons p.text-danger").show().text(err.message);
     		$(".editor-status.editor-error").show();
@@ -424,6 +427,10 @@ $(function(){
     	$("#editor-buttons p.text-danger").hide();
     	$(".editor-status").hide();
 		$(".editor-status.editor-ok").show();
+	}
+
+	window.editor.getSession().on('change', function(e) {
+		reloadEditor();
 	});
 	
 	//load the default editor
@@ -431,29 +438,37 @@ $(function(){
 		url: "/lisp/editor-default.lisp",
 		dataType: "text"
 	}).done(function(data){
-		editor.setValue(data);
-		editor.clearSelection();
+		window.editor.setValue(data);
+		window.editor.clearSelection();
 	});
 
-	var original_env = $.extend(true, {}, lisp.env);
-	var prompt = $('#prompt').jqconsole(null, '➤ ', '...   ');
+	
+	window.prompt = $('#prompt').jqconsole(null, '➤ ', '...   ');
 
 	// Abort prompt on Ctrl+Z.
-    prompt.RegisterShortcut('Z', function() {
-      prompt.AbortPrompt();
+    window.prompt.RegisterShortcut('Z', function() {
+      	window.prompt.AbortPrompt();
+      	window.prompt.Clear();
+		window.prompt.Prompt(true, handle, is_multiline);
     });
     // Move to line start Ctrl+A.
-    prompt.RegisterShortcut('A', function() {
-      prompt.MoveToStart();
+    window.prompt.RegisterShortcut('A', function() {
+      window.prompt.MoveToStart();
     });
     // Move to line end Ctrl+E.
-    prompt.RegisterShortcut('E', function() {
-      prompt.MoveToEnd();
+    window.prompt.RegisterShortcut('E', function() {
+      window.prompt.MoveToEnd();
     });
-    prompt.RegisterMatching('{', '}', 'brace');
-    prompt.RegisterMatching('(', ')', 'paran');
-    prompt.RegisterMatching('[', ']', 'bracket');
-    prompt.SetIndentWidth(4); 
+    // Clear window.prompt with Ctrl+C
+    window.prompt.RegisterShortcut('C', function() {
+    	window.prompt.AbortPrompt();
+      	window.prompt.Clear();
+		window.prompt.Prompt(true, handle, is_multiline);
+    });
+    window.prompt.RegisterMatching('{', '}', 'brace');
+    window.prompt.RegisterMatching('(', ')', 'paran');
+    window.prompt.RegisterMatching('[', ']', 'bracket');
+    window.prompt.SetIndentWidth(4); 
 
 	function add_expression(exp){
 		var $el = $("<div>").addClass("console-item").addClass("exp").text(exp);
@@ -492,8 +507,8 @@ $(function(){
 		add_expression(expression);
 		doLisp(expression);
 		
-		prompt.Clear();
-		prompt.Prompt(true, handle, is_multiline);
+		window.prompt.Clear();
+		window.prompt.Prompt(true, handle, is_multiline);
 		return false;
 	};
 
@@ -516,7 +531,26 @@ $(function(){
 		return false;
 	}
 
-	prompt.Prompt(true, handle, is_multiline);
+	window.prompt.Prompt(true, handle, is_multiline);
+
+	window.resetLisp = function(){
+		try{
+			window.prompt.AbortPrompt();
+		}catch(err){
+			// Do nothing
+		}
+      	window.prompt.Clear();
+		window.prompt.Prompt(true, handle, is_multiline);
+		$("#history").empty("");
+		
+		lisp.env = $.extend(true, {}, original_env);
+		reloadEditor();
+	}
+
+	$("#editor-pane .tools > a.reload").click(function(){
+		console.log("Reseting Lisp Environment");
+		resetLisp();
+	});
 
 	// redirect all focus to console
 	// $(window).click(function() {  

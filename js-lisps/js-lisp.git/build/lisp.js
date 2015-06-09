@@ -1701,6 +1701,7 @@ defmacro("defmacro", function (name, arglist /*, &rest */) {
 			return ret;
 		});
 		macro.documentation = documentation;
+		macro.source = toLisp([name, arglist].concat(args));
 		lisp.env.set(name, macro);
 		return macro;
 	})(env, args);
@@ -1878,7 +1879,7 @@ defmacro("defun", function (name, arglist /*, ... */) {
 	
 	var body = argsToArray(arguments).slice(2);
 	var lambda = resolve([_S("lambda"), arglist].concat(body));
-	
+	lambda.source = toLisp([_S("lambda"), arglist].concat(body));
 	lisp.env.set(name, lambda);
 	return lambda;
 });
@@ -2179,6 +2180,7 @@ defmacro("setq", function (symbol, expression) {
 	assert(symbol instanceof Symbol, "(setq) requires a symbol as its first " +
 		"argument (got " + toLisp(symbol) + ")");
 	var value = resolve(expression);
+	value.source = toLisp(expression)
 	lisp.env.set(symbol, value);
 	return value;
 });
