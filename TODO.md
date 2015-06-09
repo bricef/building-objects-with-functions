@@ -3,7 +3,7 @@ Next steps
 
 * Get web editor in a state where it can be used to develop the talk itself.
 
-Q: Is there a way I could dynamially build the talk from the editor?
+Q: Is there a way I could dynamically build the talk from the editor?
 A: you'd need an env-saver service
 
 String save is pretty straight forward -> login? Unique id? Firebase?
