@@ -39,7 +39,7 @@
 (defun get-in (m k)
   (cond 
     ((empty? m) nil)
-    ((equal (first (first m)) k) (get-val (first m)))
+    ((equal (get-key (first m)) k) (get-val (first m)))
     (:else (get-in (rest m) k))))
 
 (defun concat (l1 l2)
@@ -87,6 +87,12 @@
 	((get-in obj message) obj args))
 
 (tell shape :area)
+
+; we can also use a macro to make property assignment nicer
+(defmacro defprop (class name function)
+	`(setq ,class (assoc ,class ,(to-keyword name) ,function)))
+
+
 
 ; We're now missing inheritance.
 ; We can create it by adding a parent attribute to the class
@@ -158,9 +164,6 @@
 ; 	(setq name (assoc name :parent par))
 ; 	(setq name (assoc name :fname (lambda (this fargs) body)))
 ; )
-
-(defmacro defmethod (class name function)
-	`(setq ,class (assoc ,class ,(to-keyword name) ,function)))
 
 ; (defun new (class &opt parent)
 ; 	(cond 

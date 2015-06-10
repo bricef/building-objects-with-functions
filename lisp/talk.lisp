@@ -289,16 +289,179 @@ o.f(g); //-> h")
 
 
 (Slide 
-	:title ""
-	:content "")
+	:title "Picking a place to start"
+	:content "
+<p>We'll build our objects from associative lists.</p>
+<p>Most languages have a similar datastructure. You might know it by the following names:<p>
+<ul>
+<li>Maps</li>
+<li>Dictonaries</li>
+<li>Hashtables</li>
+<li>Associative Arrays</p>
+</ul>
+<p>Naturally, because we're building things from scratch, we don't have this.</p>
+<p>All modern lisps have such a datastructure, for what it's worth.</p>
+<p>We're building it here because it's instructive</p>
+<p>This isn't going to be efficient!</p>")
+
+(Slide
+	:title "A Basic API"
+	:content "
+<p>Let's take a look at what our API might look like</p>")
+
+(Code :code "
+; Creation
+(Hash)
+
+; Associate a value to a key
+(assoc Hash :key value) ;-> new hash
+
+; Getting a value out
+(get-in myHash :key) ;-> value
+
+; Removing a value
+(dissoc myHash :key) ;-> New Hash
+")
+
+(Slide
+	:title "Our implementation" 
+	:content "
+<p>We'll use a list of key-value pairs.</p>
+<p>The final structure will look something like this:</p>")
+
+(Code :code "
+(
+	(:a 1)
+	(:b 2)
+)")
+
+(Slide :content "
+<p>Let's get started with some simple utility functions</p>")
+
+(Code :code "
+(defun Hash () `())
+
+(defun second (l)
+  (first (rest l)))
+
+(defun third (l)
+	(first (rest (rest l))))
+
+(defun get-key (kv)
+  (first kv))
+
+(defun get-val (kv)
+  (second kv))
+
+(defun empty? (xs)
+    (equal `() xs))
+")
+
+(Slide 
+	:title "Implementing the API" 
+	:content "
+<p>Let's start Implementing the API</p>
+<p>We'll begin by accessing the values:</p>")
+
+(Code :code "
+(defun get-in (m k)
+  (cond 
+    ((empty? m) 
+    	nil)
+    ((equal (get-key (first m)) k) 
+    	(get-val (first m)))
+    (:else 
+    	(get-in (rest m) k))))")
+
+(Slide :content "<p>We can continue by adding a new element</p>")
+
+(Code :code "
+(defun assoc (m k v)
+  \"Associates value 'v' to key 'k' in map 'm'\"
+  (cond 
+    ((or (is-null m) (empty? m)) 
+    	(list (list k v)))
+    ((equal (get-key (first m)) k) 
+    	(cons (list k v) (rest m)))
+    (:else 
+    	(cons (first m) (assoc (rest m) k v)))))")
+
+(Slide :content "<p>And finally by disassociating the values</p>")
+
+(Code :code "
+(defun dissoc (m k)
+  (cond
+    ((or (is-null m) (empty? m)) nil)
+    ((equal (get-key (first m)) k) (rest m))
+    (:else (cons (first m) (dissoc (rest m) k)))))")
+
+(Slide :title "Let's test!"
+	:content "
+<p>Well, that wasn't so bad!</p>
+<p>Now we have our associative lists what does that give us?</p>")
+
+(Heading :title "Moving to objects")
+
+(Slide 
+	:title "How far can we go with just the Hash"
+	:content "
+<p>It turns out, some way!</p>
+<p>We can use the hash and first order function to build a good approximation</p>")
+
+(Code :code "
+; We can now associate attributes to objects!
+(setq shape (Hash))
+(setq shape (assoc shape :height 4))
+(setq shape (assoc shape :width 3))
+
+; We can also add functions as values into 
+; our objects, because we have first 
+; order functions
+(setq shape 
+	(assoc shape :area 
+		(lambda (this) 
+			(* (get-in this :height) 
+			   (get-in this :width)))))
+
+; And use these functions by extracting 
+; them manually
+((get-in shape :area) shape) ;-> 12
+")
+
+(Slide :title "So how far to go?"
+	:content "
+<p>Well, we could start by improving the syntax of calling methods</p>")
+
+(Code :code "
+(defun tell (obj message &opt args)
+	((get-in obj message) obj args))")
+
+(Slide :content "
+<p>And for defining properties:</p>")
+
+(Code :code "
+; we can also use a macro to make 
+; property assignment nicer
+(defmacro defprop (class name function)
+	`(setq ,class 
+		(assoc ,class 
+			,(to-keyword name) 
+			,function)))")
+
 
 (Heading
 	:title "Arriving")
+
+(Slide :title "Taking a step back"
+	:content "<p>Let's review how far we've got so far.</p>")
 
 (Quote
 	:said "The truth is of course is that there is no journey. We are arriving and departing all at the same time."
 	:by "David Bowie")
 
+(Heading :title "Why do we care?")
+
+(Image :src "img/hoc.jpg")
 ; # Why does this matter? why do we care?
 ; Power! I'm a power hungry maniac. 
 ; Expressive power in particular. 
@@ -308,6 +471,11 @@ o.f(g); //-> h")
 
 ; # Review of the entire code.
 ; Image of final environment with breakdown of section in colour coded
+
+
+(Slide :content "
+	<p>Note that much is missing here! We've got quite a long way to get to the complete object system used by other languages</p>
+	<p>Hopefully you can see the bones of the system starting to come out.</p>")
 
 ;     -----
 ;     [---]-> State handling
