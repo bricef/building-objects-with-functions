@@ -28,13 +28,26 @@
 	:title "Destination"
 	:desc "Beginning with the end in mind")
 
+(Slide 
+	:title "Minimum viable Object Orientation (MVOOL?)"
+	:content "
+	<ol>
+		<li>Objects have properties</li>
+		<li>Objects respond to messages</li>
+		<li>Objects Inherit properties from their parents</li>
+	</ol>
+	")
+
 (Heading
 	:title "Departing"
 	:desc "Building a purely functional associative array")
 
 (Heading
-	:title "Arriving"
-	:desc "The truth is of course is that there is no journey. - David Bowie")
+	:title "Arriving")
+
+(Quote
+	:said "The truth is of course is that there is no journey. We are arriving and departing all at the same time."
+	:by "David Bowie")
 
 (Heading
 	:title "What this is really about")
