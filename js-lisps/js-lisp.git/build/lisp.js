@@ -5233,6 +5233,7 @@ return {
 	Symbol: Symbol,
 	Keyword: Keyword,
 	Generator: Generator,
+	toLisp: toLisp,
 	
 	env: ROOT_ENV,
 	

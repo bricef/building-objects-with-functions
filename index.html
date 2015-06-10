@@ -240,19 +240,46 @@ License: You must have a valid license purchased only from themeforest(the above
 
 			<div id="content-pane" class="row">
 				<div id="main-lesson-flow" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-					<div class="dashboard-stat blue-madison">
-						<div class="visual">
-							<i class="fa fa-comments"></i>
-						</div>
-						<div class="details">
-							<div class="number">
-								Welcome
+					
+					<script id="template-heading" type="text/x-handlebars-template">
+						<div class="dashboard-stat blue-madison">
+							<div class="visual">
+								<i class="fa fa-comments"></i>
 							</div>
-							<div class="desc">
-								to <i>Building objects with functions.</i> 
+							<div class="details">
+								<div class="number">
+									{{{title}}}
+								</div>
+								<div class="desc">
+									{{{desc}}}
+								</div>
 							</div>
 						</div>
-					</div>
+					</script>
+
+					<script id="template-slide" type="text/x-handlebars-template">
+						<div class="panel panel-default">
+								{{#if title}}
+								<div class="panel-heading">
+									<h3 class="panel-title">{{{title}}}</h3>
+								</div>
+								{{/if}}
+								<div class="panel-body">
+									 {{{content}}}
+								</div>
+							</div>
+					</script>
+
+					<script id="template-code" type="text/x-handlebars-template">
+						<div class="slide-editor-container">
+							<button type="button" class="btn btn-success">
+								Add to editor <i class="fa fa-long-arrow-right"></i>
+							</button>
+							<pre class="slide-editor">{{code}}</pre>
+						</div>
+					</script>
+
+
 
 
 				</div> <!-- End lesson flow -->
@@ -318,6 +345,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <script src="js/jqconsole.js"></script>
 <script src="js/mousetrap.min.js"></script>
+<script src="js/handlebars-v3.0.3.js"></script>
 
 <!-- bring in Lisp -->
 <script src="js-lisps/js-lisp.git/build/lisp.js"></script>
@@ -325,6 +353,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- lisp scripts -->
 <script type="text/lisp" src="lisp/core.lisp"></script>
 <script type="text/lisp" src="lisp/setup.lisp"></script>
+<script type="text/lisp" src="lisp/talk.lisp"></script>
 
 
 <script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -433,6 +462,8 @@ $(function(){
 		reloadEditor();
 	});
 	
+	var original_env = lisp.env;
+
 	//load the default editor
 	$.ajax({
 		url: "/lisp/editor-default.lisp",
@@ -476,7 +507,14 @@ $(function(){
 		$("#history").append($el)
 	}
 	
-	function add_result(res){
+	function add_result(res, exp){
+		if(res instanceof Array){
+			res = lisp.toLisp(res);
+		} else if (res instanceof Function){
+			res = "#<function "+exp+" ...>";
+		} else if(res instanceof lisp.Macro){
+			res = "#<macro "+exp+" ...>";
+		}
 		var $el = $("<div>").addClass("console-item").addClass("result").text(res);
 		// syntax highlight using ace?
 		$("#history").append($el);
@@ -494,7 +532,7 @@ $(function(){
 			if(res === undefined){
 				throw {message:"undefined"};
 			}else{
-				add_result(res);
+				add_result(res, exp);
 			}
 		}catch(err){
 			add_error(err.message);
@@ -542,8 +580,7 @@ $(function(){
       	window.prompt.Clear();
 		window.prompt.Prompt(true, handle, is_multiline);
 		$("#history").empty("");
-		
-		lisp.env = $.extend(true, {}, original_env);
+		lisp.env = original_env; //TODO: This doesn't work! how do we reset the bugger?
 		reloadEditor();
 	}
 
@@ -553,9 +590,9 @@ $(function(){
 	});
 
 	// redirect all focus to console
-	// $(window).click(function() {  
- //      prompt.Focus();  
- //    })
+	$(window).click(function() {  
+      prompt.Focus();  
+    })
 
   	// init metronic core componets
   	Metronic.init(); 

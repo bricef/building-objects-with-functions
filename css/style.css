@@ -154,3 +154,28 @@
     color:#C3292D;
     font-weight: bold;
 }
+
+.panel {
+    font-size: xx-large;
+}
+.panel h3{
+    font-size: xx-large;
+}
+.panel .panel-body{
+    font-size: x-large;
+}
+.slide-editor-container{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #002451;
+    margin-bottom: 20px;
+}
+pre {
+    border: 0px;
+}
+.slide-editor{
+    font-size: x-large;
+}
+.slide-editor-container > button {
+    float:right;
+}

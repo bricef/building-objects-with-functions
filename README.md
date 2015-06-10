@@ -69,8 +69,6 @@ and
 
 are equivalent. They mean "The quoted thing as is".
 
-
-
 You know lisp now. My work here is done, let's grab some beers.
 
 # Programming Assumptions
@@ -144,7 +142,7 @@ There are more exotic options out there.
 
 # What this is really about
 
- * Yes, this **is** a lisp sales pitch. If you run a lisp company, I'm happy to talk about
+ * Yes, this **is** a lisp sales pitch. If you run a lisp company, I'm happy to talk about comissions
  * But seriously,
  * This talk is not really about objects
  * What I've done is shown you an alternative way of developing software both in the result and the process.
