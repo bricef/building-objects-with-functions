@@ -10,3 +10,7 @@
 		((== undefined name.source) "Source not available")
 		(:else name.source)))
 
+
+(defun cons (x xs)
+	"Adds 'x' to the beginning of 'xs'"
+	(array-concat (list x) xs))

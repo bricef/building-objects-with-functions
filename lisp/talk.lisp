@@ -11,22 +11,260 @@
 (setq Slide (MakeTemplate "slide"))
 (setq Code (MakeTemplate "code"))
 (setq Quote (MakeTemplate "quote"))
+(setq Image (MakeTemplate "img"))
 
 (Heading 
 	:title "Welcome"
 	:desc "To <i>Building Objects with functions</i>.")
 
+(Image :src "img/gandalf.jpg")
+
+(Slide
+	:title "Why I'm giving this talk"
+	:content "
+	<p>What I'm about to present is the exact approach that made 
+	me learn functional programming.</p>
+	<p>I first encountered it in the last chapter of <em>On Lisp</em> by 
+	Paul Graham. You can find the <b>full text online for free</b>.</p>
+	<p>Reading that chapter was the moment that made me learn Lisp.</p>
+	")
+; # Why I'm giving this talk
+;  * My personal "Oh Shit" moment
+;  * What made me learn lisp
+
+(Slide
+	:title "The purpose of this talk"
+	:content "
+	<p>This talk has two main aims</p>
+	<ul>
+		<li>To inspire you to learn more</li>
+		<li>To transform some of you the way I was</li>
+		<li>To explore the basic concepts of OOP from a differnet angle</li>
+	</ul>")
+
+;  * The Wizard Club
+;      - Lisp's reputation
+;      - The Neckbeard Hacker
+;      - Image of gandalf macbook "Ah... A Lisp Hacker"
+
+(Slide
+	:title "What this talk is not about"
+	:content "
+	<p>This is not about learning Lisp.</p>
+	<p>This is not about re-writing existing object systems</p>
+	")
+
+(Slide
+	:title "How to watch this talk"
+	:content "
+	<p>The talk (in the form you see now) will be placed online and a link will go on the meetup page</p>
+	<ul>
+		<li>Don't try to follow every step. Especially if you don't know Lisp.</p>
+		<li>Details don't matter that much right now.</p>
+		<li>Try and walk away with an appreciation for power and expressiveness</li>
+	</ul>
+	")
+
+; # How to watch this talk
+;  * Health Warning. If you're new to Lisp, this is a firehose. Don't fight it. 
+;  * You're not expected to remember the details
+;  * You should walk away with an appreciation for expressive power
+;  * Objects with functions is just an example.
+;  * It's the one I picked because it's the one that transformed me
+;  * I will Always refer back to the higher level picture 
+;  * All available online for you to go through on your own term.
+;  * You can get in touch with me directly through the website (in-context) or by email (brice@fractallambda.com)
+;  * This is a Nothing up my sleeve talk. Ie, everything is visble. That doesn't mean it's the best. Efficiency is ~~sometimes~~ always ignored for the sake of simplicity.
+;  * This was not built in 1h!
+
 (Heading
 	:title "Lisp Primer"
 	:desc "Getting started with Lisp")
+
+(Slide 
+	:title "What's with these parentheses..."
+	:content "
+	<p>The first thing anyone notices is the parentheses.</p>
+	<p>Newcomers from <b>curly braces languages</b> like C, Java,
+	C#, etc... will be familiar with the following:</p>")
+
+; ## The parentheses
+; Curly braces language 
+
+;     
+
+(Code :code "
+/*
+ * <object>.<verb>(<subject>) 
+ */
+man.eat(dog)")
+
+
+
+; Lisp 
+
+;     (<verb> <object> <subject>) ; (eat man dog)
+
+(Slide :content "<p>Lisp just places the parentheses in different places:")
+
+(Code :code "
+;
+; (<verb> <object> <subject>)
+;
+(eat man dog)")
+
+(Slide :content "
+	<p>Although the difference between subject and objects isn't as clear cut as in
+	curly braces languages, and you're really better off writing:</p>")
+
+(Code :code "
+;
+; (<verb> <subject> <subject> ...)
+;
+(eat dog cat spam eggs)")
+
+
+; A better representation would be
+
+;     (<verb> <subject> <subject> ...) ; (eat dog cat spam eggs)
+
+; This is a **good** thing. So little syntax makes reading code much easier.
+
+(Slide :content "
+<p>This syntax is a <b>good thing</b>!</p>
+<p>We'll see why that is at the end when we write our first macro</p>
+")
+
+(Slide :title "First Order Functions" :content "
+<p>In Lisp, functions can be values too. </p>
+<p>For example, in curly braces languages you might have:</p>
+")
+
+(Code :code "
+o.f(g); //-> h")
+
+(Slide :content "
+<p>In this case, only <tt>f</tt> is a function.</p> 
+<p>In Lisp, where you might have:</p>")
+; ## First order functions
+; Functions can be values.
+
+; For example, in curly braces, if you have a
+
+;     o.f(g)-> h
+
+; Only `f` is code. `o`, is an object (namespace for code and holder of data), `g` and `h` are data.
+
+; In Lisp
+
+;     (f o g) -> h
+
+(Code :code "
+(f o g) ;-> h")
+
+(Slide :content "
+<p>All of <tt>f</tt>, <tt>o</tt>, <tt>g</tt> and <tt>h</tt> can be functions!</p>
+<p>Let's take a look at an example.</p>")
+
+; All `f`, `o`, `g` and `h` can be functions. 
+
+(Code :code "
+(defun say-something () 
+	\"Something\") ; Note how we don't need 'return'
+
+(defun say-nothing () 
+	\"Nothing\")
+
+(defun say-maybe (sayingA sayingB)
+	(lambda (dosay?)
+		(if dosay? (sayingB)
+		(sayingA))))
+")
+
+(Slide :content "
+<p>And the result of <tt>say-maybe</tt> can be used as a function :)</p>
+<p>Now you basically know lisp! Let's go for Pizza.</p>")
+
+
+
+; Trippy. Or is that foggy?
+
+; ## Quoting and unquoting
+
+; The forms
+
+;     `a
+
+; and 
+
+;     (quote a)
+
+; are equivalent. They mean "The quoted thing as is".
+
+; You know lisp now. My work here is done, let's grab some beers.
 
 (Heading
 	:title "Assumptions"
 	:desc "The base of our pyramid")
 
+(Quote 
+	:said "Entities must not be multiplied beyond necessity"
+	:by "William of Ockham")
+
+; > "When you assume, you're making an ass out of U and me." - Anonymous
+
+
+(Slide :title "What can we rely on"
+	:content "
+<p>It turns out, very little.</p>
+<p>Here is the list of all primitives we'll be using in the talk:</p>
+<ul>
+<li><tt>first</tt> or <tt>car</tt></li>
+<li><tt>rest</tt> or <tt>cdr</tt></li>
+<li><tt>list</tt></li>
+<li><tt>equal</tt></li>
+<li><tt>cond</tt></li>
+<li><tt>cons</tt></li>
+<li><tt>or</tt></li>
+<li><tt>and</tt></li>
+<li><tt>not</tt></li>
+<li><tt>setq</tt></li>
+<li><tt>defun</tt></li>
+<li><tt>defmacro</tt></li>
+</ul>
+")
+; Lists, first, rest, cond, eq?, empty? (in scheme) 
+
+
 (Heading
 	:title "Destination"
 	:desc "Beginning with the end in mind")
+
+
+; ## The Core
+; The concept of "objects", 
+; Objects contain data (fields / attributes)
+; Objects contain code code (procedures / methods)
+; Methods can access and modify the data of the object with which they are associated ("this"). 
+; Objects interact with one another
+; Popular languages are class-based
+; Objects are instances of classes
+; Class == Type
+; Instances are individual objects
+; Instances choose what code and data to use when called
+; Late binding 'this' 
+
+; ## Nice to have
+; Class-level data (class variables)
+; Class-level methods
+; Encapsulation (private members)
+; Inheritance? -> Composition better in my book, but ok.
+
+; ## Nuttier than squirrel poop
+; Garbage collection
+; Compile time type checking -> Issue with Compilation! Let's make a type checker.
+
+
 
 (Slide 
 	:title "Minimum viable Object Orientation (MVOOL?)"
@@ -36,11 +274,23 @@
 		<li>Objects respond to messages</li>
 		<li>Objects Inherit properties from their parents</li>
 	</ol>
+	<p>Ugliness is permitted for the sake of time if we know how we could improve it in the future.</p>
 	")
 
 (Heading
 	:title "Departing"
 	:desc "Building a purely functional associative array")
+
+; # The path we must take (Journey)
+; > "sooner or later you're going to realize just as I did that there's a difference between knowing the path and walking the path." - Morpheus
+
+; Associative arrays?
+; Garbage collection?
+
+
+(Slide 
+	:title ""
+	:content "")
 
 (Heading
 	:title "Arriving")
@@ -48,6 +298,34 @@
 (Quote
 	:said "The truth is of course is that there is no journey. We are arriving and departing all at the same time."
 	:by "David Bowie")
+
+; # Why does this matter? why do we care?
+; Power! I'm a power hungry maniac. 
+; Expressive power in particular. 
+; Let's just review:
+; we built an object system (the foundational paradigm for most people in this room) in a single talk. 
+; It's clear, concise, elegant, and readable code.
+
+; # Review of the entire code.
+; Image of final environment with breakdown of section in colour coded
+
+;     -----
+;     [---]-> State handling
+;     [---]-> Blah blah
+;     [---]-> Table implementation
+;     [---]-> GC
+;     -----
+
+; That's it. You've seen every line.
+
+; # Pedantic corner. "Ummm actually."
+; State management as pure fn isn't shown.
+; Yes, that's right. There's a lack of purity! OMG. 
+; Two options:
+;     - Manual state management (let form on the state data structure)
+;     - Monads come in - that's the topic for another talk.
+
+; There are more exotic options out there.
 
 (Heading
 	:title "What this is really about")
@@ -91,18 +369,45 @@
 	")
 
 (Slide
-	:title "A different process by using the REPL"
+	:title "A different process by using interactive development"
 	:content "
-	<p>
+	<p>We haven't fully explored this aspect. Development can become 
+	even more interactive. For example, because code is data, the environment 
+	can be serialised to disk as lisp code any time.</p>
+	<p>There are some much more sophisticated tools to do this.</p>
+	<p>For example, <a href=\"#\">Light Table</a> allows you to relaod code 
+	in the browser at the function level, to replace individual functions while
+	they're being called in an update loop.</p>
 	")
+
+(Slide
+	:title "Artefact vs Side Effect"
+	:content "
+	<p>This way of develping software is different to the approach you usually take.</p>
+	<p>Traditionally, the program is <em>an artefact that you create</em>.</p>
+	<p>We perform discovery to figure out what the problem is and what the solution could be.</p>
+	<p>By using the repl to explore the problem, we're working in a different paradigm.<p>
+	<p>The program is the result of the conversation we've had with the system.</p>
+	<p>It becomes <em>a side effect of the discovery</em>. The feedback loop is much shorter.</p>
+	")
+
+(Quote
+	:said "That language is an instrument of human reason, and not merely a medium for the expression of thought, is a truth generally admitted."
+	:by "George Boole")
+(Slide
+	:content "<p>The difference is qualitative, and experiencing the second mode
+	of development will spoil you.</p>
+	<p>You'll never want to go back to <em>Program as Artefact</em>.</p>")
 
 (Heading :title "Thank you for your time")
 
 (Slide 
-	:title "Stay in touch"
+	:title "Please stay in touch"
 	:content "
 	<p>I hope this will be the beginning of a bigger journey</p>
-	<p/>Please <b>stay in touch</b> by tweeting to <a href=\"https://twitter.com/fractallambda\">@fractallambda</a> or emailing <a href=\"mailto:brice@fractallambda.com\">brice@fractallambda.com</a></p> 
+	<p>There's still much to improve on on what we've done.</p>
+	<p/>Please <b>stay in touch</b> by tweeting to <a href=\"https://twitter.com/fractallambda\">@fractallambda</a> 
+	or emailing <a href=\"mailto:brice@fractallambda.com\">brice@fractallambda.com</a> if you take this any further or take any actions as a reuslt of this evening</p> 
 	<p>And <b>share</b> where you take these ideas</p>
 	")
 
@@ -157,7 +462,6 @@
 					:maxLines 10000
 					:readOnly t
 					:highlightActiveLine f
-					:padding 20
 					:showGutter f
 					:fontSize 20
 					:mode "ace/mode/lisp"

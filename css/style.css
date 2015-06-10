@@ -179,3 +179,7 @@ pre {
 .slide-editor-container > button {
     float:right;
 }
+.talk-image{
+    width:100%;
+    margin-bottom: 30px;
+}
