@@ -10,6 +10,7 @@
 (setq Heading (MakeTemplate "heading"))
 (setq Slide (MakeTemplate "slide"))
 (setq Code (MakeTemplate "code"))
+(setq Quote (MakeTemplate "quote"))
 
 (Heading 
 	:title "Welcome"
@@ -48,9 +49,9 @@
 	<p>Secondly, we used a <b>different process</b> for getting to our result<p>
 	")
 
-; (Quote 
-; 	:said "Lisp isn't a language, it's a building material."
-; 	:by "Alan Kay")
+(Quote 
+	:said "Lisp isn't a language, it's a building material."
+	:by "Alan Kay")
 
 (Slide
 	:title "A different result by using a DSL"
@@ -64,6 +65,7 @@
 	")
 
 (Code 
+	:disableEditor t
 	:code "(Heading
 	:title \"Lisp Primer\"
 	:desc \"Getting started with Lisp\")")
@@ -76,7 +78,10 @@
 	")
 
 (Slide
-	:title "A different process by using the REPL")
+	:title "A different process by using the REPL"
+	:content "
+	<p>
+	")
 
 (Heading :title "Thank you for your time")
 

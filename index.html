@@ -272,14 +272,24 @@ License: You must have a valid license purchased only from themeforest(the above
 
 					<script id="template-code" type="text/x-handlebars-template">
 						<div class="slide-editor-container">
+							{{#if disableEditor}}
+
+							{{^}}
 							<button type="button" class="btn btn-success">
 								Add to editor <i class="fa fa-long-arrow-right"></i>
 							</button>
+							{{/if}}
 							<pre class="slide-editor">{{code}}</pre>
 						</div>
 					</script>
 
-
+					<script id="template-quote" type="text/x-handlebars-template">
+						<blockquote class="pull-right">
+							<p>{{{said}}}</p>
+							<small>{{by}}</small>
+						</blockquote>
+						<div class="clearfix"></div>
+					</script>
 
 
 				</div> <!-- End lesson flow -->
