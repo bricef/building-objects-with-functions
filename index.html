@@ -479,7 +479,7 @@ $(function(){
 
 	//load the default editor
 	$.ajax({
-		url: "/lisp/editor-default.lisp",
+		url: "lisp/editor-default.lisp",
 		dataType: "text"
 	}).done(function(data){
 		window.editor.setValue(data);
