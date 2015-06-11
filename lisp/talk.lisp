@@ -406,7 +406,7 @@ o.f(g); //-> h")
 	:title "How far can we go with just the Hash"
 	:content "
 <p>It turns out, some way!</p>
-<p>We can use the hash and first order function to build a good approximation</p>")
+<p>We can use the hash and first class function to build a good approximation</p>")
 
 (Code :code "
 ; We can now associate attributes to objects!
@@ -543,7 +543,7 @@ o.f(g); //-> h")
 	even more interactive. For example, because code is data, the environment 
 	can be serialised to disk as lisp code any time.</p>
 	<p>There are some much more sophisticated tools to do this.</p>
-	<p>For example, <a href=\"#\">Light Table</a> allows you to relaod code 
+	<p>For example, <a href=\"http://lighttable.com/\">Light Table</a> allows you to reload code 
 	in the browser at the function level, to replace individual functions while
 	they're being called in an update loop.</p>
 	")
