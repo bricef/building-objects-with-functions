@@ -448,6 +448,63 @@ o.f(g); //-> h")
 			,(to-keyword name) 
 			,function)))")
 
+(Slide :title "Now, for Inheritance"
+	:content "
+	<p>Now we've satisfied our first two points. Let's move on to Inheritance.</p>
+	<p>We get this by adding a parent attribute and looking recursively up the parent 
+	hierarchy for a definition.</p>
+	<p>Let's start with our old definition of get-in...</p>
+")
+
+(Code :code "
+; This is the definition of get-in we used.
+(defun get-in (m k)
+  (cond 
+    ((empty? m) nil)
+    ((equal (get-key (first m)) k) (get-val (first m)))
+    (:else (get-in (rest m) k))))
+")
+
+(Slide :content "<p>And we can use it in our recursive definition</p>")
+
+(Code :code "
+(defun rget-in (m k)
+	(let 
+		((parent (get-in m :parent))
+		 (v?	 (get-in m k)))
+	(cond 
+		((not (is-null v?)) v?)
+		((not (is-null parent)) (rget-in parent k))
+		(:else nil))))")
+
+(Slide :content "<p> We'll need to redefine <tt>tell</tt> to use our new function</p>")
+
+(Code :code "
+(defun tell (obj message &opt args)
+  ((rget-in obj message) obj args))")
+
+(Slide :title "What does this allow us to do?"
+	:content "<p>Let's take a look</p>")
+
+(Code :code "
+(setq Mammal (Hash))
+(setq Mammal 
+	(assoc Mammal :pet 
+		(lambda (this) (tell this :speak)) ))
+
+(setq Dog (Hash))
+(setq Dog (assoc Dog :speak (lambda (this) \"Woof\")))
+(setq Dog (assoc Dog :parent Mammal))
+
+(setq Cat (Hash))
+(setq Cat (assoc Cat :speak (lambda (this) \"Meow\")))
+(setq Cat (assoc Cat :parent Mammal))
+
+
+
+(tell Cat :pet) ;->\"Meow\"
+(tell Dog :pet) ;-> \"Woof\"")
+
 
 (Heading
 	:title "Arriving")

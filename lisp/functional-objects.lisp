@@ -113,6 +113,10 @@
 		((not (is-null parent)) (rget-in parent k))
 		(:else nil))))
 
+; Of course, for this to work, we'll have to modify tell to use recursive get:
+(defun tell (obj message &opt args)
+  ((rget-in obj message) obj args))
+
 ; For example
 
 (setq Mammal (Hash))
@@ -128,9 +132,7 @@
 (setq Cat (assoc Cat :speak (lambda (this) "Meow")))
 (setq Cat (assoc Cat :parent Mammal))
 
-; Of course, for this to work, we'll have to modify tell to use recursive get:
-(defun tell (obj message &opt args)
-	((rget-in obj message) obj args))
+
 
 (tell Cat :pet) ;-> "Meow"
 (tell Dog :pet) ;-> "Woof"
