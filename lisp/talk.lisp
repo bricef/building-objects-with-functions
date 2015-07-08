@@ -135,7 +135,7 @@ man.eat(dog)")
 <p>We'll see why that is at the end when we write our first macro</p>
 ")
 
-(Slide :title "First Order Functions" :content "
+(Slide :title "First Class Functions" :content "
 <p>In Lisp, functions can be values too. </p>
 <p>For example, in curly braces languages you might have:</p>
 ")
@@ -146,7 +146,7 @@ o.f(g); //-> h")
 (Slide :content "
 <p>In this case, only <tt>f</tt> is a function.</p> 
 <p>In Lisp, where you might have:</p>")
-; ## First order functions
+; ## First class functions
 ; Functions can be values.
 
 ; For example, in curly braces, if you have a
@@ -406,7 +406,7 @@ o.f(g); //-> h")
 	:title "How far can we go with just the Hash"
 	:content "
 <p>It turns out, some way!</p>
-<p>We can use the hash and first order function to build a good approximation</p>")
+<p>We can use the hash and first class function to build a good approximation</p>")
 
 (Code :code "
 ; We can now associate attributes to objects!
@@ -416,7 +416,7 @@ o.f(g); //-> h")
 
 ; We can also add functions as values into 
 ; our objects, because we have first 
-; order functions
+; class functions
 (setq shape 
 	(assoc shape :area 
 		(lambda (this) 
