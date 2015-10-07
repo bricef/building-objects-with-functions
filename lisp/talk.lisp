@@ -620,10 +620,18 @@ o.f(g); //-> h")
 (Quote
 	:said "That language is an instrument of human reason, and not merely a medium for the expression of thought, is a truth generally admitted."
 	:by "George Boole")
+
 (Slide
 	:content "<p>The difference is qualitative, and experiencing the second mode
 	of development will spoil you.</p>
 	<p>You'll never want to go back to <em>Program as Artefact</em>.</p>")
+
+(Slide 
+	:title "Try this yourself!"
+	:content "
+	<p>This talk is hosted online so you can try it out yourself at:<br />
+	<a style=\"font-size:xx-large\" href=\"http://fractallambda.com/building-objects-with-functions/\">fractallambda.com/building-objects-with-functions/</a>.
+	</p>")
 
 (Heading :title "Thank you for your time")
 
