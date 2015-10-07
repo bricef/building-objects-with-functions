@@ -24,7 +24,7 @@
 	:content "
 	<p>What I'm about to present is the exact approach that made 
 	me learn functional programming.</p>
-	<p>I first encountered it in the last chapter of <em>On Lisp</em> by 
+	<p>I first encountered it in the last chapter of <a href=\"http://www.paulgraham.com/onlisp.html\">On Lisp</a> by 
 	Paul Graham. You can find the <b>full text online for free</b>.</p>
 	<p>Reading that chapter was the moment that made me learn Lisp.</p>
 	")
@@ -39,7 +39,7 @@
 	<ul>
 		<li>To inspire you to learn more</li>
 		<li>To transform some of you the way I was</li>
-		<li>To explore the basic concepts of OOP from a differnet angle</li>
+		<li>To explore the basic concepts of OOP from a different angle</li>
 	</ul>")
 
 ;  * The Wizard Club
@@ -575,8 +575,9 @@ o.f(g); //-> h")
 	<p>DSLs are <em>Domain Specific Languages</em></p>
 	<p>They are a <b>scalable</b> way of <b>abstracting complexity</b>. Functional languages are well suited for building DSLs, and <b>Lisp is particularly well suited</b> to this way of develping.</p>
 	<p>What we've done so far is build a DSL for manipulating objects and recreate an OO language.<p>
-	<p>You could <b>build a DSL for logical, declarative programming</b> too. Example of exactly this can be found in <a href=\"http://minikanren.org/\">Minikanren</a> or <a href=\"https://github.com/clojure/core.logic\">core.logic</a>. <a href=\"https://mitpress.mit.edu/sicp/\">SICP</a> also shows how to do this in details.</p> 
-	<p>DSL crop up everywhere.</p>
+	<p>You could <b>build a DSL for logical, declarative programming</b> too. </p>
+	<p>Examples of exactly this can be found in <a href=\"http://minikanren.org/\">Minikanren</a> or <a href=\"https://github.com/clojure/core.logic\">core.logic</a>. <a href=\"https://mitpress.mit.edu/sicp/\">SICP</a> also shows how to do this in details.</p> 
+	<p>DSLs crop up everywhere.</p>
 	<p>For example, these slides are build using a DSL:</p>
 	")
 
@@ -588,7 +589,7 @@ o.f(g); //-> h")
 
 (Slide 
 	:content "
-	<p>In practice, you will rarely want to recreate an OO language inside a functional one</p>
+	<p>In practice, you will rarely want to recreate an OO language inside a functional one.</p>
 	<p>The construct you have available in Lisp tend to be more expressive anyway.</p>
 	<p>We only used this as a usecase because everyone is very familiar with the domain.</p>
 	")
@@ -599,7 +600,7 @@ o.f(g); //-> h")
 	<p>We haven't fully explored this aspect. Development can become 
 	even more interactive. For example, because code is data, the environment 
 	can be serialised to disk as lisp code any time.</p>
-	<p>There are some much more sophisticated tools to do this.</p>
+	<p>There are some more sophisticated tools to do this.</p>
 	<p>For example, <a href=\"http://lighttable.com/\">Light Table</a> allows you to reload code 
 	in the browser at the function level, to replace individual functions while
 	they're being called in an update loop.</p>
@@ -630,10 +631,10 @@ o.f(g); //-> h")
 	:title "Please stay in touch"
 	:content "
 	<p>I hope this will be the beginning of a bigger journey</p>
-	<p>There's still much to improve on on what we've done.</p>
+	<p>There is still much to learn and to improve.</p>
 	<p/>Please <b>stay in touch</b> by tweeting to <a href=\"https://twitter.com/fractallambda\">@fractallambda</a> 
-	or emailing <a href=\"mailto:brice@fractallambda.com\">brice@fractallambda.com</a> if you take this any further or take any actions as a reuslt of this evening</p> 
-	<p>And <b>share</b> where you take these ideas</p>
+	or emailing <a href=\"mailto:brice@fractallambda.com\">brice@fractallambda.com</a> if you take this any further or take any actions as a result of this evening.</p> 
+	<p>And <b>share</b> where you take these ideas!</p>
 	")
 
 (Slide
